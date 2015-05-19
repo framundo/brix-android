@@ -1,15 +1,40 @@
 apply plugin: 'com.android.application'
+apply from: 'wall.gradle'
 
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.0"
 
     defaultConfig {
-        applicationId "ar.com.wolox.woloxlogger"
+        applicationId "com.wall.android"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+    }
+    signingConfigs {
+        debug {
+            storeFile file('keystore/debug.keystore')
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        release {
+            storeFile file('keystore/keystore')
+            storePassword "$wall_store_password"
+            keyAlias "$wall_key_alias"
+            keyPassword "$wall_key_password"
+        }
+    }
+    productFlavors {
+        production {
+            signingConfig signingConfigs.release
+        }
+        stage {
+            signingConfig signingConfigs.debug
+            applicationId defaultConfig.applicationId + ".stage"
+            versionName defaultConfig.versionName + "-stage"
+        }
     }
     lintOptions {
           checkReleaseBuilds false
