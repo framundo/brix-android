@@ -4,4 +4,5 @@
     <string name="retry">Reintentar</string>
     <string name="no_results">Sin resultados</string>
     <string name="facebook_app_id">975498455815964</string>
+    <string name="error_network">Something went wrong</string>
 </resources>

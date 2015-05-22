@@ -57,7 +57,7 @@ public class MainActivity extends WoloxActivity {
     }
 
     private void startAppActivity() {
-        startActivity(new Intent(MainActivity.this, TestActivity.class));
+        startActivity(new Intent(MainActivity.this, WallActivity.class));
         finish();
     }
 }

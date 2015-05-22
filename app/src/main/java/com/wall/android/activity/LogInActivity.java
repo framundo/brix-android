@@ -23,6 +23,8 @@ import retrofit.client.Response;
 
 public class LogInActivity extends WoloxActivity {
 
+    private static String LOG_TAG = "LogInActivity";
+
     private CallbackManager mCallbackManager;
     private LoginButton mLoginButton;
 
@@ -76,26 +78,26 @@ public class LogInActivity extends WoloxActivity {
                     @Override
                     public void success(AppUser user, Response response) {
                         UserUtils.saveUser(getApplicationContext(), user);
-                        startActivity(new Intent(LogInActivity.this, TestActivity.class));
+                        startActivity(new Intent(LogInActivity.this, WallActivity.class));
                         finish();
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         Toast.makeText(getApplicationContext(),
-                                "Something went wrong", Toast.LENGTH_SHORT).show();
+                                R.string.error_network, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
             @Override
             public void onCancel() {
-                Log.d("Callback", "Cancel!");
+                Log.d(LOG_TAG, "Cancel");
             }
 
             @Override
             public void onError(FacebookException exception) {
-                Log.d("Callback", "Error!");
+                Log.d(LOG_TAG, "Error");
             }
         });
     }
