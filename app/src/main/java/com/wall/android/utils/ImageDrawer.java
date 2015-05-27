@@ -8,22 +8,29 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.wall.android.instances.CoordUv;
+import com.wall.android.instances.UserPixel;
 import com.wall.android.views.TouchImageView;
+
+import java.util.ArrayList;
 
 public class ImageDrawer {
 
     private static String LOG_TAG = "ImageDrawer";
 
-    private int mMinZoom = 1;
-    private int mMaxZoom = 250;
     private Context mContext;
     private String mUrl;
     private ImageView mImageAuxView;
     private TouchImageView mImage;
+    private ArrayList<UserPixel> mUserPixels;
+    private Bitmap mBitmap;
+    private int mMinZoom = 1;
+    private int mMaxZoom = 1000;
+    private int mScale = 300;
 
-    public ImageDrawer(Context context, String url, TouchImageView imageMain) {
+    public ImageDrawer(Context context, TouchImageView imageMain) {
+        mUserPixels = new ArrayList<>();
         mContext = context;
-        mUrl = url;
         mImageAuxView = new ImageView(mContext);
         mImage = imageMain;
     }
@@ -46,6 +53,12 @@ public class ImageDrawer {
                 mImage.setMinZoom(mMinZoom);
                 mImage.setMaxZoom(mMaxZoom);
                 Log.d(LOG_TAG, "Ok!");
+                Log.d(LOG_TAG, "Height " + bitmap.getHeight());
+                Log.d(LOG_TAG, "Width " + bitmap.getWidth());
+                mBitmap = bitmap;
+
+                if (mUserPixels.isEmpty()) return;
+                selectAPixel(0);
             }
 
             @Override
@@ -60,6 +73,33 @@ public class ImageDrawer {
         };
 
         Picasso.with(mContext).load(mUrl).into(target);
+    }
+
+    public ArrayList<String> getPixelsArray() {
+        ArrayList<String> array = new ArrayList<>();
+
+        for (UserPixel pixel : mUserPixels) {
+            array.add("(X,Y)=(" + pixel.getX()+ "," + pixel.getY() + ") " + pixel.getColor());
+        }
+
+        return array;
+    }
+
+    public Bitmap getBitmap() {
+        return mBitmap;
+    }
+
+    public void addPixels(ArrayList<UserPixel> userPixels) {
+        mUserPixels.addAll(userPixels);
+    }
+
+    public CoordUv getPixelMapped(int pos) {
+        return MapUtils.map(mBitmap.getWidth(), mBitmap.getHeight(), mUserPixels.get(pos));
+    }
+
+    public void selectAPixel(int position) {
+        CoordUv coordUv = getPixelMapped(position);
+        mImage.setZoom(mScale, coordUv.getX(), coordUv.getY());
     }
 
     private Drawable getDrawable(boolean antiAliasing) {

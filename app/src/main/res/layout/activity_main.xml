@@ -10,13 +10,20 @@
         android:text="holis"
         />
 
+    <Spinner
+        android:id="@+id/pixels_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
     <com.wall.android.views.TouchImageView
         android:id="@+id/imageView"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_gravity="center"
         android:layout_marginTop="75dp"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
+        android:src="@drawable/com_facebook_button_background"
         />
 
 </LinearLayout>
